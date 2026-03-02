@@ -1,6 +1,16 @@
 //#include "main_rpi.h"
 
+#include "EGL/egl.h"
+
 #include <SDL/SDL_syswm.h>
+
+NativeWindowType getNativeWindowType() {
+	static SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWMInfo(&wmInfo);
+
+	return wmInfo.info.x11.wmwindow;
+}
 
 void getWindowPosition(int* x, int* y, int* width, int* height) {
 	static SDL_SysWMinfo wmInfo;

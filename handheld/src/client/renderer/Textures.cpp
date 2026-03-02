@@ -71,7 +71,9 @@ TextureId Textures::loadTexture( const std::string& resourceName, bool inTexture
 		idMap.insert(std::make_pair(resourceName, texdata.identifier));
     }
 	else {
-		idMap.insert(std::make_pair(resourceName, Textures::InvalidId));
+		// Hack?
+		idMap.insert(std::make_pair(resourceName, -1));
+		// idMap.insert(std::make_pair(resourceName, Textures::InvalidId));
 		//loadedImages.insert(std::make_pair(InvalidId, texdata));
 	}
 	return Textures::InvalidId;

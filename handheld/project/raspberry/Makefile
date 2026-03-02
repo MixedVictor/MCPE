@@ -1,4 +1,6 @@
 MODULE := minecraftpi
+# File missing?
+#../../src/client/gui/screens/MouseUnlockedScreen.cpp
 SOURCES := ../../src/main.cpp \
 ../../src/main_rpi.cpp \
 ../../src/platform/input/Controller.cpp \
@@ -57,7 +59,6 @@ SOURCES := ../../src/main.cpp \
 ../../src/client/gui/screens/InBedScreen.cpp \
 ../../src/client/gui/screens/IngameBlockSelectionScreen.cpp \
 ../../src/client/gui/screens/JoinGameScreen.cpp \
-../../src/client/gui/screens/MouseUnlockedScreen.cpp \
 ../../src/client/gui/screens/OptionsScreen.cpp \
 ../../src/client/gui/screens/PauseScreen.cpp \
 ../../src/client/gui/screens/ProgressScreen.cpp \
@@ -254,7 +255,8 @@ SHELL:=/bin/bash
 #
 # Setup default vars and paths
 #
-CFLAGS:=-mfloat-abi=hard -march=armv6j -mfpu=vfp -DRPI -DPOSIX -DGFX_SMALLER_CHUNKS -I/opt/vc/include/ -I/opt/vc/include/interface/vcos/pthreads
+# CFLAGS:=-mfloat-abi=hard -march=armv6j -mfpu=vfp -DRPI -DPOSIX -DGFX_SMALLER_CHUNKS -I/opt/vc/include/ -I/opt/vc/include/interface/vcos/pthreads
+CFLAGS := -DRPI -DPOSIX
 
 OBJECTS:=$(SOURCES:%.cpp=%.o)
 DEPS:=$(SOURCES:%.cpp=%.d)
@@ -278,8 +280,8 @@ endif
 #
 #
 #
-LDFLAGS:=-L/opt/vc/lib/ -lGLESv1_CM -lEGL -lbcm_host -lpng -lSDL -L. libRakNet_static_O1.a
-
+# LDFLAGS:=-L/opt/vc/lib/ -lGLESv1_CM -lEGL -lbcm_host -lpng -lSDL -L. libRakNet_static_O1.a
+LDFLAGS:= -lGLESv1_CM -lEGL -lpng -lSDL -lX11 -L. libRaknet_x86-64_static.a
 
 #
 # Targets

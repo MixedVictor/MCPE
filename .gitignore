@@ -2,5 +2,6 @@
 *.o
 *.out
 
-handheld/project/raspberry/minecraftpi
 handheld/project/raspberry/obj
+handheld/project/raspberry/minecraftpi
+handheld/project/raspberry/options.txt

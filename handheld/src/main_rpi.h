@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-#include "bcm_host.h"
+// #include "bcm_host.h"
 
 //#include "GLES/gl.h"
 #include "EGL/egl.h"
@@ -11,6 +11,9 @@
 
 #include <fstream>
 #include <png.h>
+#include <unistd.h>
+// Fixes the voidp?
+#include <zconf.h>
 
 #include <SDL/SDL.h>
 
@@ -115,6 +118,8 @@ static void deinitEgl(AppContext* state) {
 	_inited_egl = false;
 }
 
+NativeWindowType getNativeWindowType();
+
 void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t w, uint32_t h) {
    int32_t success = 0;
    EGLBoolean result;
@@ -123,13 +128,13 @@ void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t 
    deinitEgl(state);
    //printf("initEgl\n");
 
-   static EGL_DISPMANX_WINDOW_T nativewindow;
+//    static EGL_DISPMANX_WINDOW_T nativewindow;
 
-   DISPMANX_ELEMENT_HANDLE_T dispman_element;
-   DISPMANX_DISPLAY_HANDLE_T dispman_display;
-   DISPMANX_UPDATE_HANDLE_T dispman_update;
-   VC_RECT_T dst_rect;
-   VC_RECT_T src_rect;
+//    DISPMANX_ELEMENT_HANDLE_T dispman_element;
+//    DISPMANX_DISPLAY_HANDLE_T dispman_display;
+//    DISPMANX_UPDATE_HANDLE_T dispman_update;
+//    VC_RECT_T dst_rect;
+//    VC_RECT_T src_rect;
 
    static const EGLint attribute_list[] =
    {
@@ -144,7 +149,7 @@ void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t 
    
    static const EGLint context_attributes[] = 
    {
-      EGL_CONTEXT_CLIENT_VERSION, 1,
+      EGL_CONTEXT_CLIENT_VERSION, 2,
       EGL_NONE
    };
    EGLConfig config;
@@ -171,39 +176,46 @@ void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t 
 
    // create an EGL rendering context
    state->context = eglCreateContext(state->display, config, EGL_NO_CONTEXT, context_attributes);
+
+   EGLint egl_error = eglGetError();
+   if (egl_error != EGL_SUCCESS) {
+	  printf("eglCreateContext error: %d\n", egl_error);
+   }
+
    assert(state->context!=EGL_NO_CONTEXT);
    check();
 
    // create an EGL window surface
-   uint32_t dw, dh;
-   success = graphics_get_display_size(0 /* LCD */, &dw, &dh);
-   assert( success >= 0 );
+//    uint32_t dw, dh;
+//    success = graphics_get_display_size(0 /* LCD */, &dw, &dh);
+//    assert( success >= 0 );
 
-   dst_rect.x = x;
-   dst_rect.y = y;
-   dst_rect.width = w;
-   dst_rect.height = h;
+//    dst_rect.x = x;
+//    dst_rect.y = y;
+//    dst_rect.width = w;
+//    dst_rect.height = h;
       
-   src_rect.x = 0;
-   src_rect.y = 0;
-   src_rect.width = w << 16;
-   src_rect.height = h << 16;
+//    src_rect.x = 0;
+//    src_rect.y = 0;
+//    src_rect.width = w << 16;
+//    src_rect.height = h << 16;
 
-   dispman_display = vc_dispmanx_display_open( 0 /* LCD */);
-   dispman_update = vc_dispmanx_update_start( 0 );
+//    dispman_display = vc_dispmanx_display_open( 0 /* LCD */);
+//    dispman_update = vc_dispmanx_update_start( 0 );
          
-   dispman_element = vc_dispmanx_element_add ( dispman_update, dispman_display,
-      0/*layer*/, &dst_rect, 0/*src*/,
-      &src_rect, DISPMANX_PROTECTION_NONE, 0 /*alpha*/, 0/*clamp*/, (DISPMANX_TRANSFORM_T)0/*transform*/);
+//    dispman_element = vc_dispmanx_element_add ( dispman_update, dispman_display,
+//       0/*layer*/, &dst_rect, 0/*src*/,
+//       &src_rect, DISPMANX_PROTECTION_NONE, 0 /*alpha*/, 0/*clamp*/, (DISPMANX_TRANSFORM_T)0/*transform*/);
       
-   nativewindow.element = dispman_element;
-   nativewindow.width = w;//state->screen_width;
-   nativewindow.height = h;//state->screen_height;
-   vc_dispmanx_update_submit_sync( dispman_update );
+//    nativewindow.element = dispman_element;
+//    nativewindow.width = w;//state->screen_width;
+//    nativewindow.height = h;//state->screen_height;
+//    vc_dispmanx_update_submit_sync( dispman_update );
       
    check();
 
-   state->surface = eglCreateWindowSurface( state->display, config, &nativewindow, NULL );
+   // I don't even know if this function I made works correctly.
+   state->surface = eglCreateWindowSurface( state->display, config, getNativeWindowType(), NULL );
    assert(state->surface != EGL_NO_SURFACE);
    check();
 
@@ -225,7 +237,7 @@ void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t 
 
 void teardown() {
 	SDL_Quit();
-	bcm_host_deinit();
+	// bcm_host_deinit();
 }
 
 /*
@@ -367,7 +379,7 @@ void updateWindowPosition(App* app, AppContext* state) {
 }
 
 int main(int argc, char** argv) {
-	bcm_host_init();
+	// bcm_host_init();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("Couldn't initialize SDL\n");

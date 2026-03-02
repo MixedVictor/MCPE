@@ -6,6 +6,7 @@
 #endif
 
 #include <errno.h>
+#include <signal.h>
 
 #include "platform/input/Mouse.h"
 #include "platform/input/Multitouch.h"
