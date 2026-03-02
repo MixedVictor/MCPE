@@ -1,0 +1,6 @@
+*.d
+*.o
+*.out
+
+handheld/project/raspberry/minecraftpi
+handheld/project/raspberry/obj
