@@ -8,6 +8,7 @@
 
 /*static*/ int  Textures::textureChanges = 0;
 /*static*/ bool Textures::MIPMAP = false;
+const TextureId Textures::InvalidId;
 
 Textures::Textures( Options* options_, AppPlatform* platform_ )
 :	clamp(false),
@@ -72,9 +73,10 @@ TextureId Textures::loadTexture( const std::string& resourceName, bool inTexture
     }
 	else {
 		// Hack?
-		idMap.insert(std::make_pair(resourceName, -1));
-		// idMap.insert(std::make_pair(resourceName, Textures::InvalidId));
-		//loadedImages.insert(std::make_pair(InvalidId, texdata));
+		// idMap.insert(std::make_pair(resourceName, -1));
+		// Original
+		idMap.insert(std::make_pair(resourceName, Textures::InvalidId));
+		// loadedImages.insert(std::make_pair(InvalidId, texdata));
 	}
 	return Textures::InvalidId;
 }

@@ -40,7 +40,8 @@ public:
     {
 	TextureData out;
 
-	std::string filename = textureFolder? "data/images/" + filename_
+	// TODO: make this variable mutable or something
+	std::string filename = textureFolder? "../../data/images/" + filename_
 										: filename_;
 	std::ifstream source(filename.c_str(), std::ios::binary);
 
@@ -212,7 +213,7 @@ void move_surface(App* app, AppContext* state, uint32_t x, uint32_t y, uint32_t 
 //    nativewindow.height = h;//state->screen_height;
 //    vc_dispmanx_update_submit_sync( dispman_update );
       
-   check();
+//    check();
 
    // I don't even know if this function I made works correctly.
    state->surface = eglCreateWindowSurface( state->display, config, getNativeWindowType(), NULL );
